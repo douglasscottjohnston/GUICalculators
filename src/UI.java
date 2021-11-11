@@ -1,6 +1,6 @@
 import javax.swing.*;
 
-public class UI {
+public interface UI {
     JFrame mainFrame = new JFrame();
 
 }

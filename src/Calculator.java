@@ -2,14 +2,24 @@ import javax.swing.*;
 
 public abstract class Calculator {
 
+    //Swing elements
     private final JTextField field1;
     private final JTextField field2;
     private final JComboBox combo;
     private JButton equals;
     private JButton c;
 
+    //Reference types
     private String[] operations = {"+", "-", "*", "/"};
+    private String x1String;
+    private String x2String;
+
     private JButton[] keyPad;
+
+
+    //Primitive types
+    private double x1;
+    private double x2;
 
     public Calculator() {
         field1 = new JTextField();
@@ -51,29 +61,20 @@ public abstract class Calculator {
         return result;
     }
 
-    public JTextField getField1() {
-        return field1;
-    }
 
-    public JTextField getField2() {
-        return field2;
-    }
+    //Getters
 
-    public JComboBox getCombo() {
-        return combo;
-    }
 
-    public JButton getEquals() {
-        return equals;
-    }
 
-    public JButton getC() {
-        return c;
-    }
 
-    public String[] getOperations() {
-        return operations;
-    }
+    public double getX1() { return x1; }
+
+    public double getX2() { return x2; }
+
+    //Setters
+    public void setX1(double x1) { this.x1 = x1; }
+
+    public void setX2(double x2) { this.x2 = x2; }
 
     public void setOperations(String[] operations) {
         this.operations = operations;

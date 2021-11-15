@@ -1,2 +1,3 @@
-public class DecimalCalculator extends Calculator implements DecimalConverter {
+public class DecimalCalculator extends Calculator {
+
 }

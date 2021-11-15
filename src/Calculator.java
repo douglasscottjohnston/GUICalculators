@@ -9,6 +9,7 @@ public abstract class Calculator {
     private JButton c;
 
     private String[] operations = {"+", "-", "*", "/"};
+    private JButton[] keyPad;
 
     public Calculator() {
         field1 = new JTextField();
@@ -16,6 +17,19 @@ public abstract class Calculator {
         combo = new JComboBox(operations);
         equals = new JButton("=");
         c = new JButton("C");
+        keyPad = initializeKeyPad();
+    }
+
+    private JButton[] initializeKeyPad() {
+        JButton[] keyPad = new JButton[9];
+        for (int i = 0; i < 10; i++) {
+            if(i < 9) {
+                keyPad[i] = new JButton("" + (i++));
+            } else {
+                keyPad[i] = new JButton("0");
+            }
+        }
+        return keyPad;
     }
 
     public double calculate(double x1, double x2, String operation) {

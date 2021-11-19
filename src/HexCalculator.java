@@ -1,4 +1,9 @@
 public class HexCalculator extends Calculator  implements HexConverter{
+
+    HexCalculator() {
+        this.setTitle("Hexadecimal Calculator");
+    }
+
     @Override
     public double convertToDouble(String x) {
         return Double.parseDouble(x);

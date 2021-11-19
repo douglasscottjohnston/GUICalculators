@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 
 public abstract class Calculator {
 
@@ -13,9 +14,9 @@ public abstract class Calculator {
     private String[] operations = {"+", "-", "*", "/"};
     private String x1String;
     private String x2String;
+    private backgroundColor(Color color)
 
     private JButton[] keyPad;
-
 
     //Primitive types
     private double x1;
@@ -28,6 +29,7 @@ public abstract class Calculator {
         equals = new JButton("=");
         c = new JButton("C");
         keyPad = initializeKeyPad();
+        backgroundColor =
     }
 
     private JButton[] initializeKeyPad() {
@@ -65,7 +67,45 @@ public abstract class Calculator {
     //Getters
 
 
+    public JTextField getField1() {
+        return field1;
+    }
 
+    public JTextField getField2() {
+        return field2;
+    }
+
+    public JComboBox getCombo() {
+        return combo;
+    }
+
+    public JButton getEquals() {
+        return equals;
+    }
+
+    public JButton getC() {
+        return c;
+    }
+
+    public String[] getOperations() {
+        return operations;
+    }
+
+    public Color getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public JButton[] getKeyPad() {
+        return keyPad;
+    }
+
+    public String getX1String() {
+        return x1String;
+    }
+
+    public String getX2String() {
+        return x2String;
+    }
 
     public double getX1() { return x1; }
 

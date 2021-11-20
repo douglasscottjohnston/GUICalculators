@@ -1,3 +1,7 @@
+import javax.swing.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
 public class HexCalculator extends Calculator  implements HexConverter{
 
     HexCalculator() {
@@ -5,12 +9,64 @@ public class HexCalculator extends Calculator  implements HexConverter{
     }
 
     @Override
-    public double convertToDouble(String x) {
-        return Double.parseDouble(x);
+    public int convertToInt(String x) {
+        return Integer.parseUnsignedInt(x, 16);
     }
 
     @Override
-    public String convertToHex(double x) {
-        return Integer.toHexString((int) x);
+    public String convertToHex(int x) {
+        return Integer.toHexString(x).toUpperCase();
+    }
+
+    @Override
+    public void initializeMainPanel() {
+        getMainPanel().add(getField1());
+        getMainPanel().add(getCombo());
+        getMainPanel().add(getField2());
+        getMainPanel().add(getResult());
+        getMainPanel().add(getEquals());
+        getMainPanel().add(getBackSpace());
+        getMainPanel().add(getC());
+    }
+
+    @Override
+    public void initializeKeyPadDigits() {
+        JButton[] keyPadDigits = new JButton[16];
+        for (int i = 0; i < 16; i++) {
+            if(i > 9) {
+                keyPadDigits[i] = new JButton(((char)(i + 55)) + ""); //A-F buttons
+                keyPadDigits[i].addActionListener(getListener());
+                getMainPanel().add(keyPadDigits[i]);
+            } else {
+                keyPadDigits[i] = new JButton(i + "");
+                keyPadDigits[i].addActionListener(getListener());
+                getMainPanel().add(keyPadDigits[i]);
+            }
+        }
+        setKeyPadDigits(keyPadDigits);
+    }
+
+    @Override
+    public void initializeKeyAdapter() {
+        KeyAdapter keyAdapter = new KeyAdapter() {
+            public void keyPressed(KeyEvent key) {
+                if(key.getKeyChar() <= '9') {
+                    getLastClicked().setEditable(true);
+                } else if(key.getKeyChar() >= 'A' && key.getKeyChar() <= 'F') {
+                    getLastClicked().setEditable(true);
+                } else if(key.getKeyChar() >= 'a' && key.getKeyChar() <= 'f') {
+                    getLastClicked().setEditable(true);
+                } else getLastClicked().setEditable(key.getKeyCode() == KeyEvent.VK_BACK_SPACE);
+            }
+        };
+        setKeyAdapter(keyAdapter);
+    }
+
+    @Override
+    public String findResult() {
+        int x1 = convertToInt(getField1().getText());
+        int x2 = convertToInt(getField2().getText());
+
+        return convertToHex(calculate(x1, x2, String.valueOf(getCombo().getSelectedItem())));
     }
 }

@@ -1,8 +1,8 @@
 import javax.swing.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class BinaryCalculator extends Calculator implements BinaryConverter {
-
-    private final int base = 2;
 
     BinaryCalculator() {
         this.setTitle("Binary Calculator");
@@ -10,12 +10,23 @@ public class BinaryCalculator extends Calculator implements BinaryConverter {
 
     @Override
     public int convertToInt(String x) {
-        return Integer.parseUnsignedInt(x, base);
+        return Integer.parseUnsignedInt(x, 2);
     }
 
     @Override
     public String convertToBinary(int x) {
         return Integer.toBinaryString(x);
+    }
+
+    @Override
+    public void initializeMainPanel() {
+        getMainPanel().add(getField1());
+        getMainPanel().add(getCombo());
+        getMainPanel().add(getField2());
+        getMainPanel().add(getResult());
+        getMainPanel().add(getEquals());
+        getMainPanel().add(getBackSpace());
+        getMainPanel().add(getC());
     }
 
     @Override
@@ -31,24 +42,22 @@ public class BinaryCalculator extends Calculator implements BinaryConverter {
     }
 
     @Override
+    public void initializeKeyAdapter() {
+        KeyAdapter keyAdapter = new KeyAdapter() {
+            public void keyPressed(KeyEvent key) {
+                if(key.getKeyChar() == '0' || key.getKeyChar() == '1') {
+                    getLastClicked().setEditable(true);
+                } else getLastClicked().setEditable(key.getKeyCode() == KeyEvent.VK_BACK_SPACE);
+            }
+        };
+        setKeyAdapter(keyAdapter);
+    }
+
+    @Override
     public String findResult() {
         int x1 = convertToInt(getField1().getText());
         int x2 = convertToInt(getField2().getText());
 
         return convertToBinary(calculate(x1, x2, String.valueOf(getCombo().getSelectedItem())));
-    }
-
-    public int calculate(int x1, int x2, String operation) {
-        int result;
-
-        switch(operation){
-            case "+" -> result = x1 + x2;
-            case "-" -> result = x1 - x2;
-            case "*" -> result = x1 * x2;
-            case "/" -> result = x1 / x2;
-            default -> throw new IllegalArgumentException();
-        }
-
-        return result;
     }
 }

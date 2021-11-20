@@ -1,4 +1,4 @@
 public interface HexConverter {
-    public double convertToDouble(String x);
-    public String convertToHex(double x);
+    public int convertToInt(String x);
+    public String convertToHex(int x);
 }

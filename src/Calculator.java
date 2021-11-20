@@ -5,13 +5,12 @@ import java.awt.event.*;
 public abstract class Calculator extends JFrame {
 
     //Swing elements
-    private static JPanel mainPanel;
-    private static JPanel keyPad;
-    private static JComboBox combo;
+    private JPanel mainPanel;
     private JTextField lastClicked;
-    private static JTextField field1;
-    private static JTextField field2;
-    private static JTextField result;
+    private JTextField field1;
+    private JTextField field2;
+    private JTextField result;
+    private JComboBox<String> combo;
     private static JButton equals;
     private static JButton backSpace;
     private static JButton c;
@@ -43,42 +42,21 @@ public abstract class Calculator extends JFrame {
 
         result.setEditable(false);
 
-        //disallows character input from the keyboard
-        keyAdapter = new KeyAdapter() {
-            public void keyPressed(KeyEvent key) {
-                String display = lastClicked.getText();
-                int len = display.length();
-                
-                if(key.getKeyChar() >= '0' && key.getKeyChar() <= '9') {
-                    lastClicked.setEditable(true);
-                } else if(key.getKeyChar() == '.' && !lastClicked.getText().contains(".")) {
-                    lastClicked.setEditable(true);
-                } else {
-                    lastClicked.setEditable(false);
-                }
-            }
-        };
+        initializeKeyAdapter();
 
-        //changes lastClicked depending on which field was clicked last
-        adapter = new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                lastClicked = (JTextField) e.getSource();
-            }
-        };
-        
-        listener = e -> {
-            lastClicked.setText(lastClicked.getText() + ((JButton) e.getSource()).getText());
+        initializeAdapter();
 
-        };
+        initializeListener();
 
-        field1.addKeyListener(keyAdapter);
-        field2.addKeyListener(keyAdapter);
 
-        field1.addFocusListener(adapter);
-        field2.addFocusListener(adapter);
 
-        combo = new JComboBox(operations);
+        field1.addKeyListener(getKeyAdapter());
+        field2.addKeyListener(getKeyAdapter());
+
+        field1.addFocusListener(getAdapter());
+        field2.addFocusListener(getAdapter());
+
+        combo = new JComboBox<>(operations);
 
         equals = new JButton("=");
         backSpace = new JButton("\u21E6");
@@ -109,33 +87,66 @@ public abstract class Calculator extends JFrame {
             }
         });
 
-
-        mainPanel.add(field1);
-        mainPanel.add(combo);
-        mainPanel.add(field2);
-        mainPanel.add(result);
-        mainPanel.add(equals);
-        mainPanel.add(backSpace);
-        mainPanel.add(c);
-        mainPanel.add(dot);
+        initializeMainPanel();
 
         initializeKeyPadDigits();
 
     }
 
+    public void initializeMainPanel() {
+        getMainPanel().add(getField1());
+        getMainPanel().add(getCombo());
+        getMainPanel().add(getField2());
+        getMainPanel().add(getResult());
+        getMainPanel().add(getEquals());
+        getMainPanel().add(getBackSpace());
+        getMainPanel().add(getC());
+        getMainPanel().add(getDot());
+    }
 
     public void initializeKeyPadDigits() {
         JButton[] keyPadDigits = new JButton[10];
         for (int i = 0; i < 10; i++) {
             keyPadDigits[i] = new JButton(i + "");
-            keyPadDigits[i].addActionListener(listener);
-            mainPanel.add(keyPadDigits[i]);
+            keyPadDigits[i].addActionListener(getListener());
+            getMainPanel().add(keyPadDigits[i]);
         }
     }
 
+    public void initializeKeyAdapter() {
+        KeyAdapter keyAdapter = new KeyAdapter() {
+            public void keyPressed(KeyEvent key) {
+                if(key.getKeyChar() >= '0' && key.getKeyChar() <= '9') {
+                    getLastClicked().setEditable(true);
+                } else if(key.getKeyChar() == '.' && !getLastClicked().getText().contains(".")) {
+                    getLastClicked().setEditable(true);
+                } else if(key.getKeyCode() == KeyEvent.VK_ENTER) {
+                    getEquals().doClick();
+                } else getLastClicked().setEditable(key.getKeyCode() == KeyEvent.VK_BACK_SPACE);
+            }
+        };
+        setKeyAdapter(keyAdapter);
+    }
+
+    public void initializeAdapter() {
+        FocusAdapter adapter = new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                lastClicked = (JTextField) e.getSource();
+            }
+        };
+        setAdapter(adapter);
+    }
+
+    public void initializeListener() {
+        ActionListener listener = e -> getLastClicked().setText(getLastClicked().getText() + ((JButton) e.getSource()).getText());
+        setListener(listener);
+    }
+
     public String findResult() {
-        double x1 = Double.parseDouble(getField1().getText());
-        double x2 = Double.parseDouble(getField2().getText());
+        System.out.println(field1.getText());
+        double x1 = Double.parseDouble(field1.getText());
+        double x2 = Double.parseDouble(field2.getText());
 
         return Double.toString(calculate(x1, x2, String.valueOf(getCombo().getSelectedItem())));
     }
@@ -154,25 +165,51 @@ public abstract class Calculator extends JFrame {
         return result;
     }
 
+    public int calculate(int x1, int x2, String operation) {
+        int result;
+
+        switch(operation){
+            case "+" -> result = x1 + x2;
+            case "-" -> result = x1 - x2;
+            case "*" -> result = x1 * x2;
+            case "/" -> result = x1 / x2;
+            default -> throw new IllegalArgumentException();
+        }
+
+        return result;
+    }
+
 
     //Getters
-    public JPanel getMainPanel() { return mainPanel; }
+    public JPanel getMainPanel() { return this.mainPanel; }
 
-    public ActionListener getListener() { return listener; }
+    public KeyAdapter getKeyAdapter() { return this.keyAdapter; }
 
-    public JTextField getField1() { return field1; }
+    public FocusAdapter getAdapter() { return this.adapter; }
 
-    public JTextField getField2() { return field2; }
+    public ActionListener getListener() { return this.listener; }
 
-    public JComboBox getCombo() { return combo; }
+    public JTextField getLastClicked() { return this.lastClicked; }
 
-    public JButton getEquals() { return equals; }
+    public JTextField getField1() { return this.field1; }
 
-    public JButton getC() { return c; }
+    public JTextField getField2() { return this.field2; }
 
-    public String[] getOperations() { return operations; }
+    public JComboBox<String> getCombo() { return this.combo; }
 
-    public JButton[] getKeyPadDigits() { return keyPadDigits; }
+    public JTextField getResult() { return this.result; }
+
+    public JButton getEquals() { return this.equals; }
+
+    public JButton getBackSpace() { return this.backSpace; }
+
+    public JButton getC() { return this.c; }
+
+    public JButton getDot() { return this.dot; }
+
+    public String[] getOperations() { return this.operations; }
+
+    public JButton[] getKeyPadDigits() { return this.keyPadDigits; }
 
     public String getX1String() { return x1String; }
 
@@ -183,9 +220,17 @@ public abstract class Calculator extends JFrame {
     public double getX2() { return x2; }
 
     //Setters
+    public void setKeyAdapter(KeyAdapter keyAdapter) { this.keyAdapter = keyAdapter; }
+
+    public void setAdapter(FocusAdapter adapter) { this.adapter = adapter; }
+
+    public void setListener(ActionListener listener) { this.listener = listener; }
+
     public void setOperations(String[] operations) { this.operations = operations; }
 
     public void setKeyPadDigits(JButton[] keyPadDigits) { this.keyPadDigits = keyPadDigits; }
+
+    public void setLastClicked(JTextField lastClicked) { this.lastClicked = lastClicked; }
 
     public void setBackgroundColor(Color c){ this.mainPanel.setBackground(c); }
 

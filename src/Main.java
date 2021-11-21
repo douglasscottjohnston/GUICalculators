@@ -5,6 +5,8 @@ public class Main {
     public static HexCalculator hex;
     public static BinaryCalculator binary;
     public static BigNumberCalculator bigNum;
+    public static JTabbedPane tabs;
+    public static JFrame main;
 
 
     public static void main(String[] args) {
@@ -12,18 +14,19 @@ public class Main {
         hex = new HexCalculator();
         binary = new BinaryCalculator();
         bigNum = new BigNumberCalculator();
+        tabs = new JTabbedPane();
+        main = new JFrame("Calculators");
 
-        decimal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        decimal.setSize(300, 300);
-        decimal.setVisible(true);
+        tabs.addTab("Decimal Calculator", decimal.getMainPanel());
+        tabs.addTab("Hexadecimal Calculator", hex.getMainPanel());
+        tabs.addTab("Binary Calculator", binary.getMainPanel());
+        tabs.addTab("Big Number Caclulaotr", bigNum.getMainPanel());
 
-        hex.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        hex.setSize(300, 300);
-        hex.setVisible(true);
 
-        binary.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        binary.setSize(300, 300);
-        binary.setVisible(true);
+        main.add(tabs);
+        main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        main.setSize(850, 400);
+        main.setVisible(true);
 
     }
 }

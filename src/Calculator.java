@@ -11,11 +11,12 @@ public abstract class Calculator extends JFrame {
     private JTextField field2;
     private JTextField result;
     private JComboBox<String> combo;
-    private static JButton equals;
-    private static JButton backSpace;
-    private static JButton c;
-    private static JButton dot;
-    
+    private JButton equals;
+    private JButton backSpace;
+    private JButton c;
+    private JButton dot;
+    private JLabel converted;
+
     private KeyAdapter keyAdapter;
     private ActionListener listener;
     private FocusAdapter adapter;
@@ -41,6 +42,8 @@ public abstract class Calculator extends JFrame {
         result = new JTextField(15);
 
         result.setEditable(false);
+
+        converted = new JLabel();
 
         initializeKeyAdapter();
 
@@ -97,8 +100,8 @@ public abstract class Calculator extends JFrame {
         getMainPanel().add(getField1());
         getMainPanel().add(getCombo());
         getMainPanel().add(getField2());
-        getMainPanel().add(getResult());
         getMainPanel().add(getEquals());
+        getMainPanel().add(getResult());
         getMainPanel().add(getBackSpace());
         getMainPanel().add(getC());
         getMainPanel().add(getDot());
@@ -132,7 +135,7 @@ public abstract class Calculator extends JFrame {
         FocusAdapter adapter = new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
-                lastClicked = (JTextField) e.getSource();
+                setLastClicked((JTextField) e.getSource());
             }
         };
         setAdapter(adapter);
@@ -144,16 +147,22 @@ public abstract class Calculator extends JFrame {
     }
 
     public String findResult() {
-        System.out.println(field1.getText());
-        double x1 = Double.parseDouble(field1.getText());
-        double x2 = Double.parseDouble(field2.getText());
+        if((getField1().getText().isBlank() && !getField2().getText().isBlank()) || (getField2().getText().length() == 1 && getField2().getText().contains("."))) {
+            return getField2().getText();
+        } else if((!getField1().getText().isBlank() && getField2().getText().isBlank()) || (getField1().getText().length() == 1 && getField1().getText().contains("."))) {
+            return getField1().getText();
+        } else if((getField1().getText().isBlank() && getField2().getText().isBlank())) {
+            return "";
+        } else {
+            double x1 = Double.parseDouble(getField1().getText());
+            double x2 = Double.parseDouble(getField2().getText());
 
-        return Double.toString(calculate(x1, x2, String.valueOf(getCombo().getSelectedItem())));
+            return Double.toString(calculate(x1, x2, String.valueOf(getCombo().getSelectedItem())));
+        }
     }
 
     public double calculate(double x1, double x2, String operation) {
         double result;
-
         switch(operation) {
             case "+" -> result = x1 + x2;
             case "-" -> result = x1 - x2;
@@ -161,13 +170,11 @@ public abstract class Calculator extends JFrame {
             case "/" -> result = x1 / x2;
             default -> throw new IllegalArgumentException();
         }
-
         return result;
     }
 
     public int calculate(int x1, int x2, String operation) {
         int result;
-
         switch(operation){
             case "+" -> result = x1 + x2;
             case "-" -> result = x1 - x2;
@@ -175,7 +182,6 @@ public abstract class Calculator extends JFrame {
             case "/" -> result = x1 / x2;
             default -> throw new IllegalArgumentException();
         }
-
         return result;
     }
 
@@ -207,6 +213,8 @@ public abstract class Calculator extends JFrame {
 
     public JButton getDot() { return this.dot; }
 
+    public JLabel getConverted() { return converted; }
+
     public String[] getOperations() { return this.operations; }
 
     public JButton[] getKeyPadDigits() { return this.keyPadDigits; }
@@ -231,6 +239,8 @@ public abstract class Calculator extends JFrame {
     public void setKeyPadDigits(JButton[] keyPadDigits) { this.keyPadDigits = keyPadDigits; }
 
     public void setLastClicked(JTextField lastClicked) { this.lastClicked = lastClicked; }
+
+    public void setConverted(JLabel converted) { this.converted = converted; }
 
     public void setBackgroundColor(Color c){ this.mainPanel.setBackground(c); }
 

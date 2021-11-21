@@ -23,8 +23,8 @@ public class BinaryCalculator extends Calculator implements BinaryConverter {
         getMainPanel().add(getField1());
         getMainPanel().add(getCombo());
         getMainPanel().add(getField2());
-        getMainPanel().add(getResult());
         getMainPanel().add(getEquals());
+        getMainPanel().add(getResult());
         getMainPanel().add(getBackSpace());
         getMainPanel().add(getC());
     }
@@ -39,6 +39,7 @@ public class BinaryCalculator extends Calculator implements BinaryConverter {
 
         getMainPanel().add(zero);
         getMainPanel().add(one);
+        getMainPanel().add(getConverted());
     }
 
     @Override
@@ -47,6 +48,8 @@ public class BinaryCalculator extends Calculator implements BinaryConverter {
             public void keyPressed(KeyEvent key) {
                 if(key.getKeyChar() == '0' || key.getKeyChar() == '1') {
                     getLastClicked().setEditable(true);
+                } else if(key.getKeyCode() == KeyEvent.VK_ENTER) {
+                    getEquals().doClick();
                 } else getLastClicked().setEditable(key.getKeyCode() == KeyEvent.VK_BACK_SPACE);
             }
         };
@@ -55,9 +58,21 @@ public class BinaryCalculator extends Calculator implements BinaryConverter {
 
     @Override
     public String findResult() {
-        int x1 = convertToInt(getField1().getText());
-        int x2 = convertToInt(getField2().getText());
+        if(getField1().getText().isBlank() && !getField2().getText().isBlank()) {
+            return getField2().getText();
+        } else if(!getField1().getText().isBlank() && getField2().getText().isBlank()) {
+            return getField1().getText();
+        } else if(getField1().getText().isBlank() && getField2().getText().isBlank()) {
+            return "";
+        } else {
+            int x1 = convertToInt(getField1().getText());
+            int x2 = convertToInt(getField2().getText());
+            int result = calculate(x1, x2, String.valueOf(getCombo().getSelectedItem()));
 
-        return convertToBinary(calculate(x1, x2, String.valueOf(getCombo().getSelectedItem())));
+            getConverted().setText("\n Converted to integers: \n" + x1 +" + " + x2 + " = " + result);
+
+            return convertToBinary(result);
+        }
+
     }
 }

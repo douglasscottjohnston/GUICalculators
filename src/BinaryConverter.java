@@ -10,7 +10,9 @@ public interface BinaryConverter {
      * @param x the binary string
      * @return the int form of the binary string
      */
-    int convertToInt(String x);
+    static int convertToInt(String x) {
+        return Integer.parseUnsignedInt(x, 2);
+    }
 
     /**
      * Convert int to binary string.
@@ -18,5 +20,7 @@ public interface BinaryConverter {
      * @param x the int
      * @return the binary string
      */
-    String convertToBinary(int x);
+    static String convertToBinary(int x) {
+        return Integer.toBinaryString(x);
+    }
 }

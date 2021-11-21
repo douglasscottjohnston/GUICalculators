@@ -23,10 +23,20 @@ public class BigNumberCalculator extends Calculator {
         } else if((getField1().getText().isBlank() && getField2().getText().isBlank())) {
             return "";
         } else {
-            BigDecimal x1 = new BigDecimal(getField1().getText());
-            BigDecimal x2 = new BigDecimal(getField2().getText());
+            try {
+                BigDecimal x1 = new BigDecimal(getField1().getText());
+                BigDecimal x2 = new BigDecimal(getField2().getText());
+                try {
+                    return calculate(x1, x2, String.valueOf(getCombo().getSelectedItem())).toString();
+                } catch(ArithmeticException e) {
+                    e.printStackTrace();
+                    return "Do not divide by zero";
+                }
 
-            return calculate(x1, x2, String.valueOf(getCombo().getSelectedItem())).toString();
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                return "Not an acceptable input";
+            }
         }
     }
 
@@ -40,6 +50,10 @@ public class BigNumberCalculator extends Calculator {
      */
     public BigDecimal calculate(BigDecimal x1, BigDecimal x2, String operation) {
         BigDecimal result;
+        if(operation.equals("/") && x2.equals(BigDecimal.ZERO)) {
+            getResult().setText("Do not divide by zero");
+            throw new ArithmeticException();
+        }
         switch(operation) {
             case "+" -> result = x1.add(x2);
             case "-" -> result = x1.subtract(x1);

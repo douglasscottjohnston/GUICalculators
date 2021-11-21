@@ -47,8 +47,6 @@ public abstract class Calculator extends JFrame {
 
         initializeListener();
 
-
-
         field1.addKeyListener(getKeyAdapter());
         field2.addKeyListener(getKeyAdapter());
 
@@ -62,7 +60,6 @@ public abstract class Calculator extends JFrame {
         backSpace = new JButton("\u21E6");
         c = new JButton("C");
         dot = new JButton(".");
-
 
         equals.addActionListener(e -> {
             result.setText("");
@@ -172,10 +169,16 @@ public abstract class Calculator extends JFrame {
         } else if((getField1().getText().isBlank() && getField2().getText().isBlank())) {
             return "";
         } else {
-            double x1 = Double.parseDouble(getField1().getText());
-            double x2 = Double.parseDouble(getField2().getText());
+            try {
+                double x1 = Double.parseDouble(getField1().getText());
+                double x2 = Double.parseDouble(getField2().getText());
 
-            return Double.toString(calculate(x1, x2, String.valueOf(getCombo().getSelectedItem())));
+                return Double.toString(calculate(x1, x2, String.valueOf(getCombo().getSelectedItem())));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                return "Not an acceptable input";
+            }
+
         }
     }
 
@@ -187,7 +190,7 @@ public abstract class Calculator extends JFrame {
      * @param operation the operation
      * @return the result of the calculation
      */
-    public double calculate(double x1, double x2, String operation) {
+    public static double calculate(double x1, double x2, String operation) {
         double result;
         //noinspection DuplicatedCode
         switch(operation) {
@@ -208,7 +211,7 @@ public abstract class Calculator extends JFrame {
      * @param operation the operation
      * @return the result of the calculation
      */
-    public int calculate(int x1, int x2, String operation) {
+    public static int calculate(int x1, int x2, String operation) {
         int result;
         //noinspection DuplicatedCode
         switch(operation){

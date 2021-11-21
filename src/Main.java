@@ -6,12 +6,12 @@ import javax.swing.*;
  * @author Douglas Johnston
  */
 public class Main {
-    public static DecimalCalculator decimal;
-    public static HexCalculator hex;
-    public static BinaryCalculator binary;
-    public static BigNumberCalculator bigNum;
-    public static JTabbedPane tabs;
-    public static JFrame main;
+    private static DecimalCalculator decimal;
+    private static HexCalculator hex;
+    private static BinaryCalculator binary;
+    private static BigNumberCalculator bigNum;
+    private static JTabbedPane tabs;
+    private static JFrame main;
 
 
     /**

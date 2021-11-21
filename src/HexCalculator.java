@@ -18,16 +18,6 @@ public class HexCalculator extends Calculator  implements HexConverter{
     }
 
     @Override
-    public int convertToInt(String x) {
-        return Integer.parseUnsignedInt(x, 16);
-    }
-
-    @Override
-    public String convertToHex(int x) {
-        return Integer.toHexString(x).toUpperCase();
-    }
-
-    @Override
     public void initializeMainPanel() {
         getMainPanel().add(getField1());
         getMainPanel().add(getCombo());
@@ -80,13 +70,24 @@ public class HexCalculator extends Calculator  implements HexConverter{
         } else if(getField1().getText().isBlank() && getField2().getText().isBlank()) {
             return "";
         } else {
-            int x1 = convertToInt(getField1().getText());
-            int x2 = convertToInt(getField2().getText());
-            int result = calculate(x1, x2, String.valueOf(getCombo().getSelectedItem()));
+            try {
+                int x1 = HexConverter.convertToInt(getField1().getText());
+                int x2 = HexConverter.convertToInt(getField2().getText());
+                int result;
+                try {
+                    result = calculate(x1, x2, String.valueOf(getCombo().getSelectedItem()));
+                } catch(ArithmeticException e) {
+                    e.printStackTrace();
+                    return "Do not divide by zero";
+                }
 
-            getConverted().setText("\n Converted to integers: \n" + x1 +" + " + x2 + " = " + result);
+                getConverted().setText("\n Converted to integers: \n" + x1 + " " + getCombo().getSelectedItem() + " " + x2 + " = " + result);
 
-            return convertToHex(result);
+                return HexConverter.convertToHex(result);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                return "Not an acceptable input";
+            }
         }
     }
 }

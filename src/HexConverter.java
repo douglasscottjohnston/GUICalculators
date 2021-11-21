@@ -10,7 +10,9 @@ public interface HexConverter {
      * @param x the hex string
      * @return the int form of the hex string
      */
-    int convertToInt(String x);
+    static int convertToInt(String x) {
+        return Integer.parseUnsignedInt(x, 16);
+    }
 
     /**
      * Convert int to hex string.
@@ -18,5 +20,7 @@ public interface HexConverter {
      * @param x the int
      * @return the hex string
      */
-    String convertToHex(int x);
+    static String convertToHex(int x) {
+        return Integer.toHexString(x).toUpperCase();
+    }
 }

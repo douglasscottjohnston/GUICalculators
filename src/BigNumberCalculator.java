@@ -1,7 +1,15 @@
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+/**
+ * BigNumberCalculator that extends Calculator and is used to calculate BigNumbers.
+ * TCSS 305 Project_#02
+ * @author Douglas Johnston
+ */
 public class BigNumberCalculator extends Calculator {
+    /**
+     * Instantiates a new Big number calculator.
+     */
     BigNumberCalculator() {
         this.setTitle("Big Number Calculator");
     }
@@ -22,6 +30,14 @@ public class BigNumberCalculator extends Calculator {
         }
     }
 
+    /**
+     * Calculate the two values depending on the operation given as a string and returns the result as a BigDecimal.
+     *
+     * @param x1        the first value
+     * @param x2        the second value
+     * @param operation the operation
+     * @return the result of the calculation
+     */
     public BigDecimal calculate(BigDecimal x1, BigDecimal x2, String operation) {
         BigDecimal result;
         switch(operation) {

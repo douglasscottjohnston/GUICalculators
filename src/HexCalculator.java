@@ -2,8 +2,17 @@ import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+/**
+ * HexCalculator class that extends Calculator and is used to calculate hexadecimal numbers
+ * TCSS 305 Project_#02
+ *
+ * @author Douglas Johnston
+ */
 public class HexCalculator extends Calculator  implements HexConverter{
 
+    /**
+     * Instantiates a new Hex calculator.
+     */
     HexCalculator() {
         this.setTitle("Hexadecimal Calculator");
     }
@@ -35,15 +44,12 @@ public class HexCalculator extends Calculator  implements HexConverter{
         for (int i = 0; i < 16; i++) {
             if(i > 9) {
                 keyPadDigits[i] = new JButton(((char)(i + 55)) + ""); //A-F buttons
-                keyPadDigits[i].addActionListener(getListener());
-                getMainPanel().add(keyPadDigits[i]);
             } else {
                 keyPadDigits[i] = new JButton(i + "");
-                keyPadDigits[i].addActionListener(getListener());
-                getMainPanel().add(keyPadDigits[i]);
             }
+            keyPadDigits[i].addActionListener(getListener());
+            getMainPanel().add(keyPadDigits[i]);
         }
-        setKeyPadDigits(keyPadDigits);
         getMainPanel().add(getConverted());
     }
 

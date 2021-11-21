@@ -2,8 +2,16 @@ import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+/**
+ * BinaryCalculator class that extends Calculator and is used to calculate binary numbers
+ * TCSS 305 Project_#02
+ * @author Douglas Johnston
+ */
 public class BinaryCalculator extends Calculator implements BinaryConverter {
 
+    /**
+     * Instantiates a new Binary calculator.
+     */
     BinaryCalculator() {
         this.setTitle("Binary Calculator");
     }

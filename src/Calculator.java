@@ -1,37 +1,33 @@
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * Abstract calculator class which provides the blueprint for all calculators
+ * TCSS 305 Project_#02
+ * @author Douglas Johnston
+ */
 public abstract class Calculator extends JFrame {
 
     //Swing elements
-    private JPanel mainPanel;
+    private final JPanel mainPanel;
     private JTextField lastClicked;
-    private JTextField field1;
-    private JTextField field2;
-    private JTextField result;
-    private JComboBox<String> combo;
-    private JButton equals;
-    private JButton backSpace;
-    private JButton c;
-    private JButton dot;
-    private JLabel converted;
+    private final JTextField field1;
+    private final JTextField field2;
+    private final JTextField result;
+    private final JComboBox<String> combo;
+    private final JButton equals;
+    private final JButton backSpace;
+    private final JButton c;
+    private final JButton dot;
+    private final JLabel converted;
 
     private KeyAdapter keyAdapter;
     private ActionListener listener;
     private FocusAdapter adapter;
 
-    private JButton[] keyPadDigits;
-
-    //Reference types
-    private String[] operations = {"+", "-", "*", "/"};
-    private String x1String;
-    private String x2String;
-
-    //Primitive types
-    private double x1;
-    private double x2;
-
+    /**
+     * Instantiates a new Calculator.
+     */
     public Calculator() {
 
         mainPanel = new JPanel();
@@ -59,6 +55,7 @@ public abstract class Calculator extends JFrame {
         field1.addFocusListener(getAdapter());
         field2.addFocusListener(getAdapter());
 
+        String[] operations = {"+", "-", "*", "/"};
         combo = new JComboBox<>(operations);
 
         equals = new JButton("=");
@@ -96,6 +93,10 @@ public abstract class Calculator extends JFrame {
 
     }
 
+
+    /**
+     * Initializes the main panel in the correct order
+     */
     public void initializeMainPanel() {
         getMainPanel().add(getField1());
         getMainPanel().add(getCombo());
@@ -107,6 +108,9 @@ public abstract class Calculator extends JFrame {
         getMainPanel().add(getDot());
     }
 
+    /**
+     * Initializes the key pad digits.
+     */
     public void initializeKeyPadDigits() {
         JButton[] keyPadDigits = new JButton[10];
         for (int i = 0; i < 10; i++) {
@@ -116,6 +120,9 @@ public abstract class Calculator extends JFrame {
         }
     }
 
+    /**
+     * Initializes key adapter so that it only accepts numbers, dots, and adds functionality for the enter and backspace keys.
+     */
     public void initializeKeyAdapter() {
         KeyAdapter keyAdapter = new KeyAdapter() {
             public void keyPressed(KeyEvent key) {
@@ -131,6 +138,9 @@ public abstract class Calculator extends JFrame {
         setKeyAdapter(keyAdapter);
     }
 
+    /**
+     * Initializes adapter.
+     */
     public void initializeAdapter() {
         FocusAdapter adapter = new FocusAdapter() {
             @Override
@@ -141,11 +151,19 @@ public abstract class Calculator extends JFrame {
         setAdapter(adapter);
     }
 
+    /**
+     * Initializes listener.
+     */
     public void initializeListener() {
         ActionListener listener = e -> getLastClicked().setText(getLastClicked().getText() + ((JButton) e.getSource()).getText());
         setListener(listener);
     }
 
+    /**
+     * Find the result of the two fields and return it as a string.
+     *
+     * @return the string
+     */
     public String findResult() {
         if((getField1().getText().isBlank() && !getField2().getText().isBlank()) || (getField2().getText().length() == 1 && getField2().getText().contains("."))) {
             return getField2().getText();
@@ -161,8 +179,17 @@ public abstract class Calculator extends JFrame {
         }
     }
 
+    /**
+     * Calculate the two values depending on the operation given as a string and returns the result as a double.
+     *
+     * @param x1        the first value
+     * @param x2        the second value
+     * @param operation the operation
+     * @return the result of the calculation
+     */
     public double calculate(double x1, double x2, String operation) {
         double result;
+        //noinspection DuplicatedCode
         switch(operation) {
             case "+" -> result = x1 + x2;
             case "-" -> result = x1 - x2;
@@ -173,8 +200,17 @@ public abstract class Calculator extends JFrame {
         return result;
     }
 
+    /**
+     * Calculate the two values depending on the operation given as a string and returns the result as an int.
+     *
+     * @param x1        the first value
+     * @param x2        the second value
+     * @param operation the operation
+     * @return the result of the calculation
+     */
     public int calculate(int x1, int x2, String operation) {
         int result;
+        //noinspection DuplicatedCode
         switch(operation){
             case "+" -> result = x1 + x2;
             case "-" -> result = x1 - x2;
@@ -186,69 +222,131 @@ public abstract class Calculator extends JFrame {
     }
 
 
-    //Getters
+    /**
+     * Gets main panel.
+     *
+     * @return the main panel
+     */
+//Getters
     public JPanel getMainPanel() { return this.mainPanel; }
 
+    /**
+     * Gets key adapter.
+     *
+     * @return the key adapter
+     */
     public KeyAdapter getKeyAdapter() { return this.keyAdapter; }
 
+    /**
+     * Gets adapter.
+     *
+     * @return the adapter
+     */
     public FocusAdapter getAdapter() { return this.adapter; }
 
+    /**
+     * Gets listener.
+     *
+     * @return the listener
+     */
     public ActionListener getListener() { return this.listener; }
 
+    /**
+     * Gets last clicked.
+     *
+     * @return the last clicked
+     */
     public JTextField getLastClicked() { return this.lastClicked; }
 
+    /**
+     * Gets field 1.
+     *
+     * @return the field 1
+     */
     public JTextField getField1() { return this.field1; }
 
+    /**
+     * Gets field 2.
+     *
+     * @return the field 2
+     */
     public JTextField getField2() { return this.field2; }
 
+    /**
+     * Gets combo.
+     *
+     * @return the combo
+     */
     public JComboBox<String> getCombo() { return this.combo; }
 
+    /**
+     * Gets result.
+     *
+     * @return the result
+     */
     public JTextField getResult() { return this.result; }
 
+    /**
+     * Gets equals.
+     *
+     * @return the equals
+     */
     public JButton getEquals() { return this.equals; }
 
+    /**
+     * Gets backspace.
+     *
+     * @return the backspace
+     */
     public JButton getBackSpace() { return this.backSpace; }
 
+    /**
+     * Gets c.
+     *
+     * @return the c
+     */
     public JButton getC() { return this.c; }
 
+    /**
+     * Gets dot.
+     *
+     * @return the dot
+     */
     public JButton getDot() { return this.dot; }
 
+    /**
+     * Gets converted.
+     *
+     * @return the converted
+     */
     public JLabel getConverted() { return converted; }
 
-    public String[] getOperations() { return this.operations; }
-
-    public JButton[] getKeyPadDigits() { return this.keyPadDigits; }
-
-    public String getX1String() { return x1String; }
-
-    public String getX2String() { return x2String; }
-
-    public double getX1() { return x1; }
-
-    public double getX2() { return x2; }
-
-    //Setters
+    /**
+     * Sets key adapter.
+     *
+     * @param keyAdapter the key adapter
+     */
+//Setters
     public void setKeyAdapter(KeyAdapter keyAdapter) { this.keyAdapter = keyAdapter; }
 
+    /**
+     * Sets adapter.
+     *
+     * @param adapter the adapter
+     */
     public void setAdapter(FocusAdapter adapter) { this.adapter = adapter; }
 
+    /**
+     * Sets listener.
+     *
+     * @param listener the listener
+     */
     public void setListener(ActionListener listener) { this.listener = listener; }
 
-    public void setOperations(String[] operations) { this.operations = operations; }
-
-    public void setKeyPadDigits(JButton[] keyPadDigits) { this.keyPadDigits = keyPadDigits; }
-
+    /**
+     * Sets last clicked.
+     *
+     * @param lastClicked the last clicked
+     */
     public void setLastClicked(JTextField lastClicked) { this.lastClicked = lastClicked; }
-
-    public void setConverted(JLabel converted) { this.converted = converted; }
-
-    public void setBackgroundColor(Color c){ this.mainPanel.setBackground(c); }
-
-    public void setX1String(String x1String) { this.x1String = x1String; }
-
-    public void setX2String(String x2String) { this.x2String = x2String; }
-
-    public void setX1(double x1) { this.x1 = x1; }
-
-    public void setX2(double x2) { this.x2 = x2; }
 }
